@@ -213,6 +213,60 @@
 // }
 // let aa = 'aewyj';
 // text(aa);
+
+
+// 给定一个数组，编写一个返回数组的函数...
+// 是否删除了所有重复元素。
+// 从最小值到最大值排序。
+// 例子
+// [1, 2, 4, 3] ➞ [1, 2, 3, 4]
+// function text(str) {
+// 	let data = [...new Set(str)];
+// 	console.log(data.sort())
+// }
+// let aa = [1,1,2,3,5,4];
+// text(aa);
+
+
+
+
+// 创建一个接受数组的函数，并返回数组中的最后一项。
+// function text(str) {
+// 	let data = str.pop();
+// 	console.log(data);
+// }
+// let aa = [1,2,3];
+// text(aa);
+
+
+
+
+/*创建一个带有正数和负数数组的函数。返回一个数组，其中第一个元素是正数的计数，第二个元素是负数的总和。
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -11, -12, -13, -14, -15] ➞ [10, -65]
+[92, 6, 73, -77, 81, -90, 99, 8, -85, 34] ➞ [7, -252]
+[91, -4, 80, -73, -28] ➞ [2, -105]
+null ➞ []
+[] ➞ []*/
+// function text(str) {
+// 	let num = 0;
+// 	let num2 = 0;
+// 	let num3 = [];
+// 	if(str.length !== 0){
+// 		str.forEach(item => {
+// 			if (item < 0) {
+// 				num += item;
+// 			} else {
+// 				num2 ++
+// 			}
+// 		})
+// 		num3.push(num2, num);
+// 		console.log(num3);
+// 	} else {
+// 		console.log(num3);
+// 	}
+// }
+// let aa = [1,2,-3,-3];
+// text(aa);
 </script>
 </body>
 </html>
