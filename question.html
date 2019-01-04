@@ -267,6 +267,62 @@ null ➞ []
 // }
 // let aa = [1,2,-3,-3];
 // text(aa);
+
+
+
+
+// 编写一个函数来计算数字的阶乘。
+// 0 ➞ 1
+// 5 ➞ 120
+// 10 ➞ 3628800
+// function text(str) {
+// 	let num = 1;
+// 	for(let i=1; i<=str; i++) {
+// 		num *= i;
+// 	}
+// 	console.log(num);
+// }
+// let aa = 6;
+// text(aa);
+
+
+
+
+// 创建一个带两个字符串的函数,如果第一个参数以第二个参数结束,则返回true,否则返回false
+// function text(str, str2) {
+// 	let data = str.substr(str.length - str2.length, str.length);
+// 	if(data == str2) {
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// }
+// let aa = 'aabccb';
+// let bb = 'bccb';
+// console.log(text(aa, bb));
+
+
+
+// 创建一个函数，该函数接受一个数字并返回一个字符串，其中包含扩展表示法中的数字（AKA扩展形式）。有关扩展表示法的详细信息，请参阅资源选项卡。
+// expand(13) ➞ "10 + 3"
+// expand(86) ➞ "80 + 6"
+// expand(17000000) ➞ "10000000 + 7000000"
+// expand(5325) ➞ "5000 + 300 + 20 + 5"
+// function expand(num) {
+// 	let arr = num.toString().split('')
+// 	let arr1 = arr.map((x, i) => Number(x) * Math.pow(10, arr.length-i-1)).filter(x => x > 0);
+// 	return arr1.join(' + ');	
+// }
+// let aa = 53;
+// console.log(expand(aa))
+
+
+
+
+sumConsecutives = a => 
+	a.reduce((v, x, i) => (v.push(x != a[i-1] ? x : v.pop() + x), v), [])
+let aa = [1,1,2,2,2,0,3,3,2];
+console.log(sumConsecutives(aa));
 </script>
 </body>
 </html>
