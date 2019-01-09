@@ -318,11 +318,72 @@ null ➞ []
 
 
 
+// 创建一个采用整数数组（正/负）的函数，并返回连续重复的数字之和（将结果作为数组返回）。
+// sumConsecutives([0, 7, 7, 7, 5, 4, 9, 9, 0]) ➞ [0, 21, 5, 4, 18, 0]
+// sumConsecutives([4, 4, 5, 6, 8, 8, 8]) ➞ [8, 5, 6, 24]
+// sumConsecutives([-5, -5, 7, 7, 12, 0]) ➞ [-10, 14, 12, 0]
+// sumConsecutives = a => 
+// 	a.reduce((v, x, i) => (v.push(x != a[i-1] ? x : v.pop() + x), v), [])
+// 	let aa = [1,1,2,2,2,0,3,3,2];
+// console.log(sumConsecutives(aa));
 
-sumConsecutives = a => 
-	a.reduce((v, x, i) => (v.push(x != a[i-1] ? x : v.pop() + x), v), [])
-let aa = [1,1,2,2,2,0,3,3,2];
-console.log(sumConsecutives(aa));
+
+
+// 传入半径得出圆的面积和周长
+// class Shape {
+// 	private $radius;
+// 	private $data;
+// 	function __construct($radius) {
+// 		$this->radius = $radius;
+// 	}
+// 	function text() {
+// 		$this->data = pi()*($this->radius*$this->radius);
+// 		echo $this->data;
+// 	}
+// 	function Circle() {
+// 		$this->data = 2*pi()*$this->radius;
+// 		echo $this->data;
+// 	}
+// }
+
+// $Shape = new Shape(11);
+// $Shape->text();
+// echo '<br>';
+// $Shape->Circle();
+
+
+
+
+// 日期为12-24号返回true
+// function text($str) {
+//     if($str->format('md') == '1224') {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
+// $a = new DateTime('2018-12-24');
+// $b = text($a);
+// var_dump($b);
+
+
+
+
+// 创建一个交替字符串中字母大小写的函数
+// function text($a) {
+//     $arr = str_split($a);
+//     foreach($arr as $key=>$value) {
+//         if($key %2 !== 0) {
+//             $arr[$key] = strtolower($value);
+//         } else {
+//             $arr[$key] = strtoupper($value);
+//         }
+//     }
+//     $data = implode($arr);
+//     echo $data;
+// }
+// $a = "Hello";
+// text($a);
 </script>
 </body>
 </html>
