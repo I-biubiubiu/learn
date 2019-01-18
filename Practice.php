@@ -140,3 +140,58 @@
 
 // $a = 5321;
 // print_r(text($a));
+
+
+
+// 冒泡排序
+// function text($arr) {
+//     for($i=0;$i<count($arr)-1;$i++) {
+//         for($k=0;$k<count($arr)-1-$i;$k++) {
+//             if($arr[$k]>$arr[$k+1]) {
+//                 $qq = $arr[$k];
+//                 $arr[$k] = $arr[$k+1];
+//                 $arr[$k+1] = $qq;
+//             }
+//         }
+//     }
+//     return $aa;
+// }
+
+// $a = [1,3,2,5];
+// print_r(text($a));
+
+
+
+
+// 快速排序
+// function quickSort($arr)
+// {
+//     if (count($arr) <= 1) return $arr;
+//     $index = (int)floor(count($arr) / 2);
+//     $value = $arr[$index];
+//     array_splice($arr, $index, 1);
+//     $left = $right = [];
+//     for ($i = 0; $i < count($arr); $i++) {
+//         if ($arr[$i] < $value) {
+//             array_push($left, $arr[$i]);
+//         } else {
+//             array_push($right, $arr[$i]);
+//         }
+//     }
+//     $left = quickSort($left);
+//     $right = quickSort($right);
+//     array_push($left, $value);
+//     return array_merge($left, $right);
+// }
+// $a = [4,5,2,1,3];
+// print_r(quickSort($a));
+
+
+
+// 返回首写大写字母
+// function capMe($arr) {
+//     return array_map('ucfirst', array_map('strtolower', $arr));
+// }
+
+// $a = ['aa', 'BB', 'cc'];
+// print_r(capMe($a));
