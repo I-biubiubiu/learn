@@ -195,3 +195,13 @@
 
 // $a = ['aa', 'BB', 'cc'];
 // print_r(capMe($a));
+
+
+
+// 返回平均值并作为字符串返回
+// function text($arr) {
+//     return strval(round(array_sum($arr)/count($arr), 2));
+// }
+
+// $a = [1,2,3,4,5,7];
+// var_dump(text($a));
