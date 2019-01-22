@@ -126,6 +126,7 @@
 
 
 // 创建一个函数，该函数接受一个数字并返回一个字符串，其中包含扩展表示法中的数字（AKA扩展形式）。有关扩展表示法的详细信息，请参阅资源选项卡。
+// 5000 + 300 + 20 + 1
 // function text($str) {
 //     $arr = str_split($str);
 //     $data = array();
@@ -205,3 +206,131 @@
 
 // $a = [1,2,3,4,5,7];
 // var_dump(text($a));
+
+
+
+// 创建一个带字符串的函数,检查它是否具有相同数量的'x'和'o'并返回true false
+// text("ooxx") true
+// text("xooxx") flase
+// function text($str) {
+//     return substr_count(strtolower($str), 'o') == substr_count(strtolower($str), 'x') ;
+// }
+
+// $a = 'ooxx';
+// var_dump(text($a));
+
+
+
+
+// 创建一个函数,该函数采用10个数字(0到9之间)的数组,并返回格式化为电话号码的那些数字的字符串
+// (555) 555-5555
+// function text($phone) {
+//     $num = array();
+//     for ($i = 0; $i < count($phone); $i++) {
+//         if ($i == 0) {
+//             array_push($num, '(');
+//         }
+//         if ($i == 3) {
+//             array_push($num, ')');
+//             array_push($num, ' ');
+//         }
+//         if ($i == 6) {
+//             array_push($num, '-');
+//         }
+//         array_push($num, $phone[$i]);
+//     }
+//     return implode('', $num);
+// }
+
+// $a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+// echo text($a);
+
+// function text($phone) {
+//     return '(' . join(array_slice($phone, 0, 3)) . ')' . ' ' . join(array_slice($phone, 3, 3)) . '-' . join(array_slice($phone, 6, 4));
+// }
+
+// $a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+// echo text($a);
+
+
+
+
+
+// 编写一个带有四个字符串参数的函数, 用第一个字符串比较后三个字符串,验证第一个字符串是以第二个字符串开头,
+// 包含第三个字符串, 还以第四个字符串结尾, 如果第一个字符串通过所有检查返回true否则返回false,  区分大小写
+// verifySubstrs('Centipede', 'Cent', 'tip', 'pede')  true
+// function verifySubstrs($str1, $str2, $str3, $str4) {
+//     return strpos($str1, $str2) == 0 && strpos($str1, $str3) != false && strlen($str1) - strpos($str1, $str4) == strlen($str4) ? true : false;
+//     // strstr返回的是字符串
+//     // return strstr($str1, $str2) == $str1 && strstr($str1, $str3) != false && strstr($str1, $str4) &&  strstr($str1, $str4) == substr($str1, -strlen($str4)) ? true : false;
+// }
+// $a1 = 'Centipede';
+// $a2 = 'Cent';
+// $a3 = 'tip';
+// $a4 = 'pede';
+// var_dump(verifySubstrs($a1, $a2, $a3, $a4));
+
+
+
+
+// 创建一个获取数字数组并返回以下统计信息的函数
+// 最低价值
+// 最大价值
+// 序列长度
+// 平均值
+// text([6, 9, 15, -2, 92, 11]) -> [-2, 92, 6, 21.833333333333]
+// function text($arr) {
+//     return [min($arr), max($arr), count($arr), array_sum($arr)/count($arr)];
+// }
+
+// $a = [6, 9, 15, -2, 92, 11];
+// print_r(text($a));
+
+
+
+
+// 给定数字n,编写一个将PI返回到n个小数位的函数
+// myPi(5) -> 3.14159
+// function myPi($pi) {
+    // return round(M_PI, $pi);
+// }
+
+// echo myPi(6);
+
+
+
+// 计算整数的二进制1的数量 例如, 因为12的二进制的'1100'返回值应该是2
+// countOnes(100)   3
+// function countOnes($num) {
+//     return substr_count(decbin($num), 1);
+// }
+
+// $a = 999;
+// echo countOnes($a);
+
+
+
+// 创建一个函数, 非负的数组数和字符串,没有字符串返回一个新的数组;
+// text([1, 'a', 'b', 0, 15])     [1, 0, 15]
+// function text($arr) {
+//     return array_filter($arr, "is_int");
+// }
+
+// $a = [1, 2, 'a', 'b'];
+// print_r(text($a));
+
+
+
+// 创建一个以数字作为参数的函数,将所有数字从1添加到传递函数的数字,例如,如果输入为4,那么函数应返回10
+// 因为1+2+3+4 = 10;
+// function addUp($num) {
+//     $data = $num;
+//     $num --;
+//     if ($num){
+//         $data += addUp($num);
+//     }
+//     return $data;
+// }
+
+// $a = 13;
+// print_r(addUp($a));
