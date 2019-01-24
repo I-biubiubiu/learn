@@ -334,3 +334,40 @@
 
 // $a = 13;
 // print_r(addUp($a));
+
+
+
+// /** 实现随机红包
+//  * @param $total 红包总金额
+//  * @param $num   红包个数
+//  * @return array
+//  */
+// class  redbao {
+//     public function rand_section($total,$num)
+//     {
+//         $min = 0.01;//每个人最少能收到0.01元
+//         $data = [];
+//         for ($i = 1; $i < $num; $i++) {
+//             $safe_total = ($total - ($num - $i) * $min) / ($num - $i);
+//             $money = mt_rand($min * 100, $safe_total * 100) / 100;
+//             $total = $total - $money;
+//             $data[$i] = $money;
+//         }
+//         $data[$num] = $total;
+//         return $data;
+//     }
+// }
+
+//$a = new redbao();
+//var_dump($a->rand_section(100,7));
+
+
+
+// 创建一个接受字符串(人名和姓)的函数, 并返回一个字符串,其中交换了名字和姓氏
+// nameShuffle("Donald Trump")   Trump  Donald
+// function nameShuffle($name) {
+//     return strstr($name, ' ') . ' ' . strstr($name, ' ', TRUE);
+// }
+
+// $a = 'Shazi Da';
+// echo nameShuffle($a);
