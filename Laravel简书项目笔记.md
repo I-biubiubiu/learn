@@ -116,7 +116,7 @@ public function up()
 1. 目录: `app`
 2. 创建模板: `php artisan make:model Post`
 
-```
+```php
 $posts = Post::create(request(['title', 'content']));
         return redirect("/posts");
 ```
@@ -128,7 +128,7 @@ $posts = Post::create(request(['title', 'content']));
 #### 数据填充
 1. 目录: `database\factories\ModelFactory.php`
 
-```
+```php
 $factory->define(App\Post::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->sentence(6),
