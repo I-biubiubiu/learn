@@ -29,8 +29,11 @@
 #### 2-1 安装
 1. [Composer下载地址](https://pkg.phpcomposer.com/)
 2. 打开命令行并依次执行下列命令安装最新版本的 Composer：
+
 	第一步: `php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"`
+	
 	第二步: `php composer-setup.php`
+	
 	第三步: `php -r "unlink('composer-setup.php');"`
 3. 放入全局安装:
     `sudo mv composer.phar /usr/local/bin/composer`
@@ -59,10 +62,11 @@
 4. 绑定模型: 获取posts表模型,主键为id,`Route::get('/posts/{post}'，控@行)`
 	例如:  `Route::get('/posts/{post}','\App\Http\Controllers\PostController@show');`
 
-```
-	public function show(Post $post) {
-        return view('post/show',compact("post"));
-    }
+
+```php
+public function show(Post $post) {
+    return view('post/show',compact("post"));
+}
 ```
 
 #### 常用配置
