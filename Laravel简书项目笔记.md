@@ -93,8 +93,8 @@ public function show(Post $post) {
 2. 生成数据迁移文件: `php artisan make:migration create_posts_table`
 3. 执行函数: `up()`  回滚函数: `down()`
 	
-	```
-	public function up()
+```php
+public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
@@ -104,7 +104,7 @@ public function show(Post $post) {
             $table->timestamps();
         });
     }
-	```
+```
 
 4. 执行迁移: `php artisan migration`
 
