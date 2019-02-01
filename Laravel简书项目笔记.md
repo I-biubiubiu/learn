@@ -169,9 +169,13 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 
 #### 文件上传
 1. 配置文件目录: `config/filesystems.php`
+
 	默认`'default' => 'local'` 文件指向`storage\app`
+	
 	修改 `'default' => 'public'` 文件指向 `public\storage`
+	
 	执行 `执行 php artisan storage:link` 创建软连接
+	
 	这时 `public \storage` 指向了 `storage\app\public`
 
 ```php
