@@ -14,6 +14,7 @@
 | php artisan migrate:rollback           |  回滚数据迁移            |
 | php artisan make:model [filename]      |  创建模型               |
 | php artisan tinker                     |  进入tinker环境         |
+| php artisan storage:link               |  创建软连接(映射)        |
 
 ### 一 、环境要求
 
@@ -35,6 +36,7 @@
 	第二步: `php composer-setup.php`
 	
 	第三步: `php -r "unlink('composer-setup.php');"`
+
 3. 放入全局安装:
     `sudo mv composer.phar /usr/local/bin/composer`
 4. 配置中文镜像:
@@ -71,6 +73,7 @@ public function show(Post $post) {
 
 #### 常用配置
 1. 时区： 目录 `config/app.php`  `'timezone' => 'PRC',`
+2. 语言配置: 目录 `config/app.php` `'locale' => 'zh'`
 
 #### 模板配置
 1. 目录: `resource\view`
@@ -88,6 +91,7 @@ public function show(Post $post) {
 	`str_limit("$content", 100, '...')` 截取指定长度字符串, 其余内容用第三个参数显示
 	`toFormattedDateString()` 改变显示时间格式
 9. 表单提交生成token `{{csrf_field()}}`
+
 #### 数据迁移
 1. 目录: `database\migrations`
 2. 生成数据迁移文件: `php artisan make:migration create_posts_table`
@@ -111,6 +115,24 @@ public function up()
 #### 控制器
 1. 目录: `app\Http\Controllers`
 2. 创建控制器: `php artisan make:controller PostController`
+3. 验证: `$this->validate($valid1, $valid2, $valid3)`
+
+	$valid1  验证的对象 request()
+	
+	$valid2 验证规则
+	
+	$valid3 返回的错误信息
+	
+```php
+ $this->validate(request(), [
+     'title' => 'required|string|max:100|min:5',
+     'content' => 'required|string|min:10'
+ ]);
+```
+
+4. 改变返回的错误信息语言:
+	目录: `resources/lang/zh/validation.php`
+	将该目录文件内容替换成[该链接内容](https://gist.github.com/linkdesu/994b59c8dc6217dd299a)即可
 
 #### 模型
 1. 目录: `app`
@@ -125,6 +147,7 @@ $posts = Post::create(request(['title', 'content']));
 	`protected $guarded // 不可以注入的字段`
 	`protected $fillable // 可以注入的数据字段`
 	一般设置为基类其他模型继承该类
+	
 #### 数据填充
 1. 目录: `database\factories\ModelFactory.php`
 
@@ -143,3 +166,17 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 
 #### 分页
 1. 使用自带的的分页，只需调用 `paginate(7)` 方法即可 例如: `$posts = Post::orderby("created_at","desc")->paginate(6);` 页面渲染使用 `{{$posts->links()}}`
+
+#### 文件上传
+1. 配置文件目录: `config/filesystems.php`
+	默认`'default' => 'local'` 文件指向`storage\app`
+	修改 `'default' => 'public'` 文件指向 `public\storage`
+	执行 `执行 php artisan storage:link` 创建软连接
+	这时 `public \storage` 指向了 `storage\app\public`
+
+```php
+    public function imageUpload(Request $request) {
+        $path = $request->file('wangEditorH5File')->storePublicly(md5(time()));
+        return asset('storage/'. $path);
+    }
+```
