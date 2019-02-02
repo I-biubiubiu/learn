@@ -137,6 +137,8 @@ public function up()
 #### 模型
 1. 目录: `app`
 2. 创建模板: `php artisan make:model Post`
+3. 模型默认指向posts的数据表
+	更改数据表: `protected $table = 'post'`
 
 ```php
 $posts = Post::create(request(['title', 'content']));
