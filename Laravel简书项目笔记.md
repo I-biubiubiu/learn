@@ -15,6 +15,7 @@
 | php artisan make:model [filename]      |  创建模型               |
 | php artisan tinker                     |  进入tinker环境         |
 | php artisan storage:link               |  创建软连接(映射)        |
+| php artisan make:policy [filename]     |  定义策略类              |
 
 ### 一 、环境要求
 
@@ -167,7 +168,7 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 	执行插入的数据: `factory(App\model:class,10)->create`
 
 #### 分页
-1. 使用自带的的分页，只需调用 `paginate(7)` 方法即可 例如: `$posts = Post::orderby("created_at","desc")->paginate(6);` 页面渲染使用 `{{$posts->links()}}`
+1. 使用自带的的分页，只需调用 `paginate(6)` 方法即可 例如: `$posts = Post::orderby("created_at","desc")->paginate(6);` 页面渲染使用 `{{$posts->links()}}`
 
 #### 文件上传
 1. 配置文件目录: `config/filesystems.php`
@@ -185,4 +186,51 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
         $path = $request->file('wangEditorH5File')->storePublicly(md5(time()));
         return asset('storage/'. $path);
     }
+```
+
+#### 用户认证
+1. 认证用户是否登陆 `if (\Auth::attempt($user, $is_remember))`
+	
+	第一个参数传入需要验证的字段数组,如果认证成功,attempt 方法将会返回 true,反之则为 false。
+
+	第二个参数需要传入一个布尔值,在用户注销前 session 值都会被一直保存,users 数据表一定要包含一个 remember_token 字段,这是用来保存「记住我」令牌的
+
+
+#### 用户授权
+1. 生成策略: `php artisan make:policy PostPolicy`
+2. 此时生成目录: `app/Policies/PostPolicy.php`
+3. 权限的条件:
+	
+```php
+    public function update(User $user, Post $post) {
+        return $user->id == $post->user_id;
+    }
+```
+
+4. 注册策略
+	目录: `app/Providers/AuthServiceProvider.php`
+
+```php
+    protected $policies = [
+        // 'App\Model' => 'App\Policies\ModelPolicy',
+        // 'App\Post' => 'App\Policies\PostPolicy',
+        Post::class => PostPolicy::class,
+    ];
+```
+
+5. 控制器中引用: `$this->authorize('update', $post);`
+6. 模板中判断: 
+
+```php
+@can('update', $post)
+    <!-- 当前用户可以更新博客 -->
+@elsecan('create', $post)
+    <!-- 当前用户可以新建博客 -->
+@endcan
+
+@cannot('update', $post)
+    <!-- 当前用户不可以更新博客 -->
+@elsecannot('create', $post)
+    <!-- 当前用户不可以新建博客 -->
+@endcannot
 ```
