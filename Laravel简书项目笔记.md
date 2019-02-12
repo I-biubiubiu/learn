@@ -135,6 +135,8 @@ public function up()
 	目录: `resources/lang/zh/validation.php`
 	将该目录文件内容替换成[该链接内容](https://gist.github.com/linkdesu/994b59c8dc6217dd299a)即可
 
+5. 预加载数据: `$post->load('comments');`;
+
 #### 模型
 1. 目录: `app`
 2. 创建模板: `php artisan make:model Post`
@@ -168,7 +170,11 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 	执行插入的数据: `factory(App\model:class,10)->create`
 
 #### 分页
-1. 使用自带的的分页，只需调用 `paginate(6)` 方法即可 例如: `$posts = Post::orderby("created_at","desc")->paginate(6);` 页面渲染使用 `{{$posts->links()}}`
+1. 使用自带的的分页，只需调用 `paginate(6)` 方法即可 例如: `$posts = Post::orderby("created_at","desc")->withCount("comments")->paginate(6);` 页面渲染使用 `{{$posts->links()}}`
+2. 获取评论总数:
+	`withCount("comments")` 获取当前文章的评论数
+	
+	模板中使用 `{{$post->comments_count}}`显示
 
 #### 文件上传
 1. 配置文件目录: `config/filesystems.php`
@@ -218,7 +224,7 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
     ];
 ```
 
-5. 控制器中引用: `$this->authorize('update', $post);`
+5. 控制器中引用: `$this->authorize('update', $post);` 
 6. 模板中判断: 
 
 ```php
