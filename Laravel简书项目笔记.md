@@ -16,6 +16,8 @@
 | php artisan tinker                     |  进入tinker环境         |
 | php artisan storage:link               |  创建软连接(映射)        |
 | php artisan make:policy [filename]     |  定义策略类              |
+| php artisan make:command [filename]    |  生成命令               |
+| php artisan scout:import [model]       |  导入数据               |
 
 ### 一 、环境要求
 
@@ -219,8 +221,7 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 ```php
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
-        // 'App\Post' => 'App\Policies\PostPolicy',
-        Post::class => PostPolicy::class,
+        'App\Post' => 'App\Policies\PostPolicy',
     ];
 ```
 
@@ -239,4 +240,176 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 @elsecannot('create', $post)
     <!-- 当前用户不可以新建博客 -->
 @endcannot
+```
+
+
+#### 搜索模块
+1. elasticsearch安装地址: [https://github.com/medcl/elasticsearch-rtf](https://github.com/medcl/elasticsearch-rtf)
+2. Laravel 的搜索系统 Scout: [https://learnku.com/docs/laravel/5.4/scout/1276](https://learnku.com/docs/laravel/5.4/scout/1276)
+
+	使用 composer 包管理器来安装 Scout：`composer require laravel/scout`
+
+	将 ScoutServiceProvider 添加到 `config/app.php` 配置文件的 `providers` 数组中：`Laravel\Scout\ScoutServiceProvider::class,`
+
+	输入命令会在你的 `config` 目录下生成 `scout.php` 配置文件：`php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"`
+
+3. Es下载地址: [https://github.com/ErickTamayo/laravel-scout-elastic](https://github.com/ErickTamayo/laravel-scout-elastic)
+
+	使用 composer 包管理器来安装 : `composer require tamayo/laravel-scout-elastic`
+
+	将ElasticsearchProvider 添加到`config/app.php` 配置文件的 `providers` 数组中: `ScoutEngines\Elasticsearch\ElasticsearchProvider::class,`
+
+	目录: `config/scout.php`修改`driver`改为`'driver' => env('SCOUT_DRIVER', 'elasticsearch')`,新增如下代码:
+
+```php
+	'elasticsearch' => [
+        'index' => env('ELASTICSEARCH_INDEX', 'laravel'),
+        'hosts' => [
+            env('ELASTICSEARCH_HOST', 'http://localhost'),
+        ],
+    ],
+```
+
+
+#### 生成命令
+1. 创建命令:  `php artisan make:command ESInit`
+2. `$signature = 'es:init'`以什么命令启动脚本
+3. 目录: `app/Console/Kernel.php`
+	挂载:
+
+```php
+    protected $commands = [
+        \App\Console\Commands\ESInit::class,
+    ];
+```
+
+4. 安装GuzzleHttp扩展包: `composer require guzzlehttp/guzzle`
+5. `ELInit.php`中引入`use GuzzleHttp\Client;`
+6. 在handle中配置如下信息:
+
+```php
+public function handle()
+    {
+        $client = new Client();
+        $url = config('scout.elasticsearch.hosts')[0].'/_template/tmp';
+
+        $client->delete($url);
+
+        $param = [
+          'json'=> [
+            'template'=>config('scout.elasticsearch.index'),
+            'mappings'=> [
+              '_default_'=> [
+                'dynamic_templates'=> [
+                  [
+                    'strings'=> [
+                      'match_mapping_type'=> 'string',
+                      'mapping'=>[
+                        'type'=>'text',
+                        'analyzer'=> 'ik_smart',
+                        'fields'=> [
+                          'keyword'=>[
+                            'type'=> 'keyword'
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ];
+
+        $client->put($url,$param);
+
+        $this->info("======== 创建模板成功 =========");
+
+
+        //创建index
+        $url = config('scout.elasticsearch.hosts')[0].'/'.config('scout.elasticsearch.index');
+
+        $client->delete($url);
+
+        $param = [
+          'json'=> [
+            'settings'=> [
+              'refresh_interval'=>'5s',
+              'number_of_shards'=>1,
+              'number_of_replicas'=>0,
+            ],
+            'mappings'=> [
+              '_default_'=> [
+                '_all'=> [
+                  'enabled'=> false
+                ]
+              ]
+            ]
+          ]
+        ];
+
+        $client->put($url,$param);
+
+        $this->info("======== 创建索引成功 =========");
+    }
+```
+
+#### 导入数据
+1. 在`Post`模型中引入`use Laravel\Scout\Searchable;`
+2. 定义索引里的type值:
+
+```php
+    // 定义索引里面的type值
+    public function searchableAs() {
+        return "post";
+    }
+```
+
+3. 定义有那些字段需要搜索:
+
+```
+    // 定义有那些字段需要搜索
+    public function toSearchableArray() {
+        return [
+            'title' => $this->title,
+            'content' => $this->content
+        ];
+    }
+
+```
+
+4. 导入数据的命令: `php artisan scout:import "\App\Post"`
+
+#### 视图合成器
+1. 设置目录: `app\Providers\AppServiceProvider.php`
+
+```php
+public function boot()
+    {
+        // Schema::defaultStringLength(191);
+        \View::composer('layout/sidebar', function($view) {
+            $topics = \App\Topic::all();
+            $view->with('topics', $topics);
+        });
+    }
+```
+
+#### 本地约束scope
+
+```php
+    // 属于某个作者的文章
+    public function scopeAuthorBy($query, $user_id) {
+        return $query->where('user_id', $user_id);
+    }
+
+    public function postTopics() {
+        return $this->hasMany(\App\PostTopic::class, 'post_id', 'id');
+    }
+
+    // 不属于某个专题的文章
+    public function scopeTopicNotBy($query, $topic_id) {
+        return $query->doesntHave('postTopics', 'and', function($q) use($topic_id) {
+            $q->where('topic_id', $topic_id);
+        });
+    }
 ```
